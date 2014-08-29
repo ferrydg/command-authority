@@ -14,7 +14,7 @@ class CommandAuthorityServiceProvider extends ServiceProvider {
         $this->package('ferrydg/command-authority');
 
         $this->app['authority'] = $this->app->share(function($app){
-            $user = $app['auth']->user();
+            $user = $this->getUser();
             $authority = new CommandAuthority($user);
             $fn = $app['config']->get('command-authority::initialize', null);
 
@@ -34,5 +34,10 @@ class CommandAuthorityServiceProvider extends ServiceProvider {
 
             return new AuthorityCommandBus($default, $app, $translator);
         });
+    }
+
+    protected function getUser()
+    {
+        return $this->app['auth']->user();
     }
 }
