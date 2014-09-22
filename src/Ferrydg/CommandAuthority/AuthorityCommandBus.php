@@ -74,9 +74,9 @@ class AuthorityCommandBus implements CommandBus {
         // Execute authorization input decorators
         foreach ($rules as $rule)
         {
-            if ($rule instanceof DecoratedPrivilege)
+            if ($rule instanceof CommandPrivilege)
             {
-                $this->executeDecorators($command, $rule->getInputDecorators());
+                $this->executeDecorators($command, $rule->getCondition()->getInputDecorators());
             }
         }
 
@@ -86,9 +86,9 @@ class AuthorityCommandBus implements CommandBus {
         // Execute authorization output decorators
         foreach ($rules as $rule)
         {
-            if ($rule instanceof DecoratedPrivilege)
+            if ($rule instanceof CommandPrivilege)
             {
-                $this->executeDecorators($command, $rule->getOutputDecorators());
+                $this->executeDecorators($command, $rule->getCondition()->getOutputDecorators());
             }
         }
 

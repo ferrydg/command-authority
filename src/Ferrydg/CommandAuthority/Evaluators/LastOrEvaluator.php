@@ -34,8 +34,6 @@ class LastOrEvaluator extends Evaluator {
         $authority = $this->authority;
 
         return $this->rules->reduce(function($result, $rule) use ($authority) {
-            $condition = $rule->getCondition();
-            $condition && $condition->bindTo($this);
             return $rule->isAllowed($authority, $this->challenge->getResourceValue()) ? $rule : $result;
         }, null);
     }

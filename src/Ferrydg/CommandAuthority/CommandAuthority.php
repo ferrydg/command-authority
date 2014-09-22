@@ -2,6 +2,7 @@
 
 use Authority\Authority;
 use Authority\Challenge;
+use Eur\Webservice\Authority\Conditions\Condition;
 
 class CommandAuthority extends Authority {
 
@@ -17,9 +18,11 @@ class CommandAuthority extends Authority {
         return $this->lastEvaluator->check($challenge);
     }
 
-    public function allowDecorated($action, $resource, $condition = null, $inputDecorators = [], $outputDecorators = [])
+    public function allow($action, $resource, $condition = null)
     {
-        return $this->addRule(new DecoratedPrivilege($action, $resource, $condition, $inputDecorators, $outputDecorators));
+        if ($condition != null && ! $condition instanceof Condition) throw new \InvalidArgumentException('condition not an instance of Condition');
+
+        return $this->addRule(new CommandPrivilege($action, $resource, $condition));
     }
 
     public function setEvaluator($evaluator)
