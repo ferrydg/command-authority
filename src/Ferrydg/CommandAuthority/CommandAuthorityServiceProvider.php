@@ -1,5 +1,6 @@
 <?php namespace Ferrydg\CommandAuthority;
 
+use Ferrydg\CommandAuthority\Authority\Authority;
 use Illuminate\Support\ServiceProvider;
 
 class CommandAuthorityServiceProvider extends ServiceProvider {
@@ -15,7 +16,7 @@ class CommandAuthorityServiceProvider extends ServiceProvider {
 
         $this->app['authority'] = $this->app->share(function($app){
             $user = $this->getUser();
-            $authority = new CommandAuthority($user);
+            $authority = new Authority($user);
             $fn = $app['config']->get('command-authority::initialize', null);
 
             if($fn) {
@@ -25,7 +26,7 @@ class CommandAuthorityServiceProvider extends ServiceProvider {
             return $authority;
         });
 
-        $this->app->alias('authority', 'Ferrydg\CommandAuthority\CommandAuthority');
+        $this->app->alias('authority', 'Ferrydg\CommandAuthority\Authority\Authority');
 
         $this->app->bindShared('Laracasts\Commander\CommandBus', function ($app)
         {

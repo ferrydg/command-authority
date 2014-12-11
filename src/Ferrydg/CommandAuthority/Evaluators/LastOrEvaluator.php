@@ -1,7 +1,7 @@
 <?php namespace Ferrydg\CommandAuthority\Evaluators;
 
-use Authority\Challenge;
-use Authority\Evaluator;
+
+use Ferrydg\CommandAuthority\Authority\Challenge;
 
 class LastOrEvaluator extends Evaluator {
 

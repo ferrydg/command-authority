@@ -1,10 +1,7 @@
-<?php namespace Ferrydg\CommandAuthority;
+<?php namespace Ferrydg\CommandAuthority\Authority;
 
-use Authority\Authority;
-use Authority\Challenge;
-use Eur\Webservice\Authority\Conditions\Condition;
-
-class CommandAuthority extends Authority {
+class Authority
+{
     protected $user;
     protected $evaluator;
     protected $rules;
@@ -18,6 +15,16 @@ class CommandAuthority extends Authority {
         $this->evaluator = $evaluator;
         $this->rules    = new RuleRepository;
         $this->listener = $listener ?: null; // new NullListener();
+    }
+
+    public function setEvaluator($evaluator)
+    {
+        $this->evaluator = $evaluator;
+    }
+
+    public function getLastEvaluator()
+    {
+        return $this->lastEvaluator;
     }
 
     public function can($action, $resource, $resourceValue = null)
@@ -39,7 +46,7 @@ class CommandAuthority extends Authority {
     {
         if ($condition != null && ! $condition instanceof Condition) throw new \InvalidArgumentException('condition not an instance of Condition');
 
-        return $this->addRule(new CommandPrivilege($action, $resource, $condition));
+        return $this->addRule(new Privilege($action, $resource, $condition));
     }
 
     public function deny($action, $resource, $condition = null)
@@ -118,15 +125,4 @@ class CommandAuthority extends Authority {
     {
         return $this->getCurrentUser();
     }
-
-    public function setEvaluator($evaluator)
-    {
-        $this->evaluator = $evaluator;
-    }
-
-    public function getLastEvaluator()
-    {
-        return $this->lastEvaluator;
-    }
-
 }
