@@ -65,7 +65,7 @@ class AuthorityCommandBus implements CommandBus {
         $this->executeDecorators($command, $this->decorators);
 
         // Check authorization
-        if (Authority::cannot('execute', $command))
+        if (Authority::cannot($command))
         {
             throw new UnauthorizedHttpException('Unauthorized');
         }

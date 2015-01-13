@@ -2,14 +2,11 @@
 
 class Challenge
 {
-    protected $action;
     protected $resource;
     protected $resourceValue;
 
-    public function __construct($action, $resource, $resourceValue = null)
+    public function __construct($resource, $resourceValue = null)
     {
-        $this->action = $action;
-
         if (is_string($resource)) {
             $this->resource      = $resource;
             $this->resourceValue = $resourceValue;
@@ -17,11 +14,6 @@ class Challenge
             $this->resource      = get_class($resource);
             $this->resourceValue = $resource;
         }
-    }
-
-    public function getAction()
-    {
-        return $this->action;
     }
 
     public function getResource()

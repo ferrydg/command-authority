@@ -27,31 +27,31 @@ class Authority
         return $this->lastEvaluator;
     }
 
-    public function can($action, $resource, $resourceValue = null)
+    public function can($resource, $resourceValue = null)
     {
-        $challenge = new Challenge($action, $resource, $resourceValue);
+        $challenge = new Challenge($resource, $resourceValue);
 
-        $rules = $this->rulesFor($challenge->getAction(), $challenge->getResource());
+        $rules = $this->rulesFor($challenge->getResource());
 
         $this->lastEvaluator = new $this->evaluator($rules, $this);
         return $this->lastEvaluator->check($challenge);
     }
 
-    public function cannot($action, $resource, $resourceValue = null)
+    public function cannot($resource, $resourceValue = null)
     {
-        return ! $this->can($action, $resource, $resourceValue);
+        return ! $this->can($resource, $resourceValue);
     }
 
-    public function allow($action, $resource, $condition = null)
+    public function allow($resource, $condition = null)
     {
         if ($condition != null && ! $condition instanceof Condition) throw new \InvalidArgumentException('condition not an instance of Condition');
 
-        return $this->addRule(new Privilege($action, $resource, $condition));
+        return $this->addRule(new Privilege($resource, $condition));
     }
 
-    public function deny($action, $resource, $condition = null)
+    public function deny($resource, $condition = null)
     {
-        return $this->addRule(new Restriction($action, $resource, $condition));
+        return $this->addRule(new Restriction($resource, $condition));
     }
 
     protected function addRule(Rule $rule)
@@ -60,40 +60,19 @@ class Authority
         return $rule;
     }
 
-    public function addAlias($name, $actions)
-    {
-        $alias = new RuleAlias($name, $actions);
-        $this->aliases[$name] = $alias;
-        return $alias;
-    }
-
     public function setCurrentUser($currentUser)
     {
         $this->user = $currentUser;
     }
 
-    public function rulesFor($action, $resource)
+    public function rulesFor($resource)
     {
-        $aliases = $this->namesForAction($action);
-        return $this->rules->getRelevantRules($aliases, $resource);
+        return $this->rules->getRelevantRules($resource);
     }
 
     public function getRules()
     {
         return $this->rules;
-    }
-
-    public function namesForAction($action)
-    {
-        $actions = array($action);
-
-        foreach ($this->aliases as $key => $alias) {
-            if ($alias->includes($action)) {
-                $actions[] = $key;
-            }
-        }
-
-        return $actions;
     }
 
     public function resolveResourcePair($resource, $resourceValue = null)
@@ -104,16 +83,6 @@ class Authority
         }
 
         return [$resource, $resourceValue];
-    }
-
-    public function getAliases()
-    {
-        return $this->aliases;
-    }
-
-    public function getAlias($name)
-    {
-        return $this->aliases[$name];
     }
 
     public function getCurrentUser()

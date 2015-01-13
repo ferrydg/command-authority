@@ -24,10 +24,10 @@ class RuleRepository extends Collection
      * @param  string $resource Resource to check against
      * @return Collection
      */
-    public function getRelevantRules($action, $resource)
+    public function getRelevantRules($resource)
     {
-        return $this->filter(function($rule) use ($action, $resource) {
-            return $rule->isRelevant($action, $resource);
+        return $this->filter(function($rule) use ($resource) {
+            return $rule->isRelevant($resource);
         });
     }
 }

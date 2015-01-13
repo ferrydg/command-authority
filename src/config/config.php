@@ -7,13 +7,7 @@ return array(
 
             $user = $authority->getCurrentUser();
 
-            $authority->allowDecorated('execute', 'TestCommand', function ($authority, $a_user) {
-                return 1 == 1;
-            }, ['DoNothingDecorator'], [new AttribuutFilter(array('a', 'c.e', '^f'))]);
-
-            $authority->allowDecorated('execute', 'TestCommand', function ($authority, $a_user) {
-                return 1 == 2;
-            }, ['DoNothingDecorator'], ['DoNothingDecorator']);
+            $authority->allow('Example\ExampleCommand', new \Example\ExampleCondition());
     }
 
 );
